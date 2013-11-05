@@ -81,8 +81,8 @@
 </code></pre>
                 </section>
                 <section>
-                    <h2>Composer Update</h2>
-                    <img src="img/composer-update.png" />
+                    <h2>Composer Install</h2>
+                    <img src="img/composer-install.png" />
                 </section>
                 <section>
                     <section>
@@ -122,14 +122,14 @@ src
 src
   |__Onema                          #Onema
      |__RoboCli                     #Onema\RoboCli
-            |__Command              #Onema\RoboCli
-               |__TwitCommand.php   #Onema\RoboCli\TwitCommand
+            |__Command              #Onema\RoboCli\Command
+               |__TweetCommand.php   #Onema\RoboCli\TweetCommand
 </code></pre>
                     </section>
                 </section>
                 <section>
                     <section>
-                        <h2>Create a new Class TwitCommand</h2>
+                        <h2>Create a new Class TweetCommand</h2>
 <pre><code data-trim contenteditable>
 
 namespace Onema\RoboCli\Command;
@@ -143,7 +143,7 @@ use Guzzle\Http\Exception\ClientErrorResponseException;
 use Guzzle\Plugin\Oauth\OauthPlugin;
 use Guzzle\Http\Client;
 
-class TwitCommand extends Command
+class TweetCommand extends Command
 {
     
 }
@@ -156,13 +156,13 @@ class TwitCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('robocli:twitt')
-            ->setDescription('Twitt.')
+            ->setName('robocli:tweet')
+            ->setDescription('Send a status update to twitter.')
             ->addOption(
                'message',
                null,
                InputOption::VALUE_REQUIRED,
-               'Message to Twitt'
+               'Message for status update.'
             )
         ;
     }
@@ -207,7 +207,7 @@ class TwitCommand extends Command
                 </section>
                 <section>
                     <h1>THE END</h1>
-                    <h3>BY Juan Manuel Torres / onema.io / @onema</h3>
+                    <small>BY Juan Manuel Torres / onema.io / @onema</small>
                 </section>
                 <section>
                     <h2>References</h2>
