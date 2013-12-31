@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8"/>
+        <title>{{ page.title }}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <meta name="description" content="{{ page.description }}"/>
+        <meta name="author" content="Juan Torres"/>
+        
+        <!-- Le styles -->
+        {% include css.html %}
+        
+    </head>
+    
+    <body>
+        <div class="container">
+        
+        {% include navigation.html %}
+
+        {{ content }}
+
+        {% include footer.html %}
+
+      </div> <!-- /container -->
+
+
+      <!-- Le javascript
+      ================================================== -->
+      <!-- Placed at the end of the document so the pages load faster -->
+      {% include js.html %}
+    </body>
+</html>
