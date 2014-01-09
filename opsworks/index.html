@@ -1,0 +1,635 @@
+<!doctype html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+
+        <title>Setting up a dev environment - By Juan Manuel Torres</title>
+
+        <meta name="description" content="Raise your sexy factor: automated  provisioning and application deployments with AWS OpsWorks.">
+        <meta name="author" content="Juan Manuel Torres">
+
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+        <link rel="stylesheet" href="css/reveal.min.css">
+        <link rel="stylesheet" href="css/theme/default.css" id="theme">
+
+        <!-- For syntax highlighting -->
+        <link rel="stylesheet" href="lib/css/zenburn.css">
+
+        <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+        <script>
+            document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+        </script>
+
+        <!--[if lt IE 9]>
+        <script src="lib/js/html5shiv.js"></script>
+        <![endif]-->
+    </head>
+
+    <body>
+
+        <div class="reveal">
+
+            <!-- Any section element inside of this container is displayed as a slide -->
+            <div class="slides">
+                <section>
+                    <h1>Raise your </h1>
+                    <h1>sexy factor</h1>
+                    <h3>automated  provisioning and application</h3>
+                    <h3> deployments with AWS OpsWorks</h3>
+                    <p>
+                        <small>Created by <a target="_blank" href="http://onema.io">Juan Manuel Torres</a> / <a target="_blank" href="http://twitter.com/onema">@onema</a> / <a target="_blank" href="http://onema.io">onema.io</a></small>
+                    </p>
+                </section>
+                
+                <section>
+                    <section data-background="img/bogota-night.jpg">
+
+                    <h2>Who Am I?</h2>
+                        <div class="fragment">
+                            <h2>Born and raised in Bogotá Colombia</h2>
+                            <h3 class="fragment">30 largest cities in the world, 7 Mill, 8612 ft, 58 °F</h3>
+                        </div>
+                        <br /><br /><br /><br /><br /><br /><br />
+                    </section>
+                    <section>
+                        <h2>Software Engineer</h2>
+                        <ul>
+                            <li class="fragment">MS Computer Science - San Diego State University</li>
+                            <li class="fragment">5 years of professional PHP experience</li>
+                            <li class="fragment">Senior Software Engineer at CPC Strategy </li>
+                            <li class="fragment">Focus:<br />
+                                <ul>
+                                    <li>Backend Development</li>
+                                    <li>Software as a Service (SaaS)</li>
+                                    <li>Infrastructure automation</li>
+                                    <li>3rd party service integration</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h2> PHP and I go way back</h2>
+                        <ul>
+                            <li class="fragment">Spent the summer of 2001 Setting up and learning PHP 4, Apache 1, and MySQL</li>
+                            <li class="fragment">
+                                In 2002 I created a "PHP Nuke wanna be" CMS for a school project.
+
+                            </li>
+                        </ul>
+                        <p class="fragment">
+                            <img src="img/image08.gif" width="500">
+                        </p>
+
+                    </section>
+                </section>
+
+                <section data-background="img/overview.jpg">
+                    <h2>Overview</h2>
+                    <ul>
+                        <li class="fragment">Good to know, but outside the scope of this presentation</li>
+                        <li class="fragment">The problem</li>
+                        <li class="fragment">A Solution (OpsWorks)</li>
+                        <li class="fragment">Create a new Stack</li>
+                        <li class="fragment">Resource Provisioning</li>
+                        <li class="fragment">Configuration Management <br>on Lifecycle Events</li>
+                        <li class="fragment">Application Deployment</li>
+                        <li class="fragment">Access Management</li>
+                        <li class="fragment">Learning by repetition</li>
+                        <li class="fragment"><a target="_blank" href="#/15">References</a></li>
+                    </ul>
+                    <p>
+                    </p>
+                </section>
+
+                <section>
+                    <section data-background="img/good-to-know.jpg" data-background-color="black">
+                        <h2>Good to know, but outside the scope of this presentation</h2>
+                        <ul>
+                            <li class="fragment">AWS</li>
+                            <li class="fragment">GIT</li>
+                            <li class="fragment">Frameworks</li>
+                            <li class="fragment">Chef</li>
+                            <li class="fragment">Auto Scaling <span class="fragment roll-in">(we'll run out of time)</span> </li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h2>
+                        Need more info??
+                        </h2>
+                        <ol>
+                            <li>Sign up for the mentorship program</li>
+                            <li>Go to the study group</li>
+                        </ol>
+                    </section>
+                </section>
+                <section>
+                    <section data-background="img/problem-and-solution.jpg">
+                    </section>
+                    <section>
+                        <h2>The Problem</h2>
+                        <p >How do you provision instances? </p>
+                        <img src="img/server-setup.jpg" width="500" class="fragment" />
+                    </section>
+                    <section>
+                        <h2>How do you deploy code?</h2>
+                        Changes directly in the server? <br />
+                        <img src="img/deployments-server.jpg" />
+                    </section>
+                    <section>
+                        <h2>How do you deploy code? (cont.)</h2>
+                        FTP deployments? <br />
+                        <img src="img/deployments-ftp.jpg" />
+                    </section>
+                    <section>
+                        <h2>How do you deploy code? (cont.)</h2>
+                        SSH -> run deployment script? <br />
+                        <img src="img/deployments-ssh.jpg" />
+                    </section>
+                    <section>
+                        <h2>How do you deploy code? (cont.)</h2>
+                        SSH -> run deployment scripts in multiple servers? <br />
+                        <img src="img/deployments-ssh2.jpg" />
+                    </section>
+                    <section>
+                        <h2>Ideal</h2>
+                        <img src="img/deployments.jpg" />
+                    </section>
+                    <section>
+                        <h2>Solution</h2>
+                        <p class="fragment">AWS OpsWorks</p>
+                        <p class="fragment">
+                            Announced on February 18, 2013
+                        <blockquote  class="fragment" cite="http://aws.amazon.com/about-aws/whats-new/">
+                            OpsWorks features an integrated experience for managing the complete application lifecycle, including: <br />
+                            <ul>
+                                <li>Resource provisioning</li>
+                                <li>Configuration management</li>
+                                <li>Application deployment</li>
+                                <li>Software updates</li>
+                                <li>Monitoring</li>
+                                <li>Access control</li>
+                            </ul>
+                        </blockquote>
+                        </p>
+                    </section>
+                    <section>
+                        <h2 class="">What does application management look like?</h2>
+                        <p>It allows you to configure and manage your applications without resorting to custom tools</p>
+                        <img src="img/image06.png" />
+                    </section>
+                    <section>
+                        <h2>Why OpsWorks?</h2>
+                        <ul>
+                            <li>Simple</li>
+                            <ul>
+                                <li>Quick to get started with</li>
+                            </ul>
+                            <li>Productive</li>
+                            <ul>
+                                <li>Reduces errors with conventions and scripted configurations</li>
+                                <li>Scalable infrastructure</li>
+                                <li>Deploy often</li>
+                                <li>Staging environments</li>
+                            </ul>
+                            <li>Flexible</li>
+                            <ul>
+                                <li>Simplifies deployments</li>
+                            </ul>
+                            <li>Powerful</li>
+                            <ul>
+                                <li>Reduces time and cost with automation</li>
+                            </ul>
+                            <li>Secure</li>
+                            <ul>
+                                <li>Enables control with permissions</li>
+                            </ul>
+                        </ul>
+                    </section>
+                </section>
+                <section>
+                    <section data-background="img/getting-started.jpg">
+                        <h2 class="">To get started define</h2>
+
+                        <ul>
+                            <li class="fragment" >A Stack</li>
+                            <li class="fragment" >A Layer: Infrastructure Automation</li>
+                            <li class="fragment" >An Instance</li>
+                            <li class="fragment" >An Application</li>
+                            <li class="fragment" >Click Deploy and you are done!</li>
+                        </ul>
+
+                    </section>
+                    <section>
+                        <h2>Create a new Stack</h2>
+                        <img src="img/image01.png" width="400">
+                    </section>
+                </section>
+                <section>
+                    <section data-background="img/layers.jpg">
+                        
+                        <h2>Create a new PHP Layer</h2>
+                        <!--<p><img src="img/image03.png" width="900"> </p>-->
+                    </section>
+                    <!--<section>-->
+                    <!--</section>-->
+                    <section>
+                        <h2>Layer configuration options</h2>
+                        <table>
+                            <tr>
+                                <td>
+                                    <p><img src="img/image04.png" width="450"> </p>
+                                </td>
+                                <td>
+                                    <ul>
+                                        <li>Build-in Chef Recipes</li>
+                                        <li>Custom Chef Recipes</li>
+                                        <li>ELB</li>
+                                        <li>EBS Volumes</li>
+                                        <li>Add an Elastic IP</li>
+                                        <li>Add OS Packages</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </table>
+
+                    </section>
+                    <section>
+                        <h2>Defining custom layer configuration using chef can be a daunting task</h2>
+                        <img src="img/chef-learning-curve.jpg" width="550" />
+                        <p>
+                            Is not that bad, Chef can be awesome!
+                        </p>
+                    </section>
+                    <section>
+                        <h2>Writing our first Chef Recipe</h2>
+                        <!--<p><strong>Metadata (Custom JSON)</strong></p>-->
+                        <pre><code>
+execute 'install_php_redis' do
+    command "pecl install redis"
+    action :run
+end
+
+template 'redis.ini' do
+    case node[:platform]
+    when 'centos','redhat','fedora','amazon'
+        path "/etc/php.d/redis.ini"
+    when 'debian','ubuntu'
+        path "/etc/php5/conf.d/redis.ini"
+    end
+    source 'redis.ini.erb'
+    owner 'root'
+    group 'root'
+    mode 0644
+    notifies :restart, resources(:service => 'apache2')
+end
+                        </code></pre>
+                        <pre><code>
+; redis.ini.erb
+; configuration for php REDIS module
+extension=redis.so
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h2>Writing a Chef Recipe Using Metadata</h2>
+                        <!--<p><strong>Recipe</strong></p>-->
+                        <pre><code>
+# Recipe. The cron resource is used to manage cron entries.
+# Requires access to cron tab
+node[:cron_jobs].each do |cron_values|
+  cron "#{cron_values[:name]}" do
+    minute  "#{cron_values[:minute]}"
+    hour    "#{cron_values[:hour]}"
+    day     "#{cron_values[:day]}"
+    month   "#{cron_values[:month]}"
+    weekday "#{cron_values[:weekday]}"
+    command "#{cron_values[:command]}"
+  end
+end
+                        </code></pre>
+                        <!--<p><strong>Metadata (Custom JSON)</strong></p>-->
+                        <pre><code>
+# Metadata
+{
+    "cron_jobs": [
+    {
+        # Send an email every sunday at 8:10
+        "name": "send_email_sunday_8",
+        "minute": "10", "hour": "8", "day": "*", "month": "*", "weekday": "0",
+        "command": "cd /srv/www/app_name/current && php .lib/mailing.php"
+    },. . .]
+}
+
+                        </code></pre>
+                    </section>
+                </section>
+                <section>
+                    <section data-background="img/lifecycle.jpg">
+                        <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+                        <h2>Configuration Management On </h2>
+                        <h2>Lifecycle Events</h2>
+
+                    </section>
+                    <section>
+                        <img src="img/lifecycle-events.jpg" height="140">
+                        <blockquote>
+                            <ol>
+                                <li class="fragment">Setup occurs on a new instance after it successfully boots</li>
+                                <li class="fragment">Configure occurs on all of the stack's instances when an instance enters or leaves the online state</li>
+                                <li class="fragment">Deploy occurs when you run a deploy command</li>
+                                <li class="fragment">Undeploy occurs when you delete an app or run an undeploy command</li>
+                                <li class="fragment">Shutdown occurs after you direct AWS OpsWorks to shut an instance down</li>
+                            </ol>
+                        </blockquote>
+                    </section>
+                    <section>
+                        <h2>PHP Application Custom Configuration</h2>
+                        <p>Remember the Chef Cookbook we added...</p>
+                        <ol>
+                            <!--<li class="fragment"><strong>Setup</strong>  <a target="_blank" href="https://github.com/onema/opsworks-chef-cookbooks/blob/master/phpenv/recipes/memoryswap.rb">phpenv::memoryswap</a> (Virtual Memory)</li>-->
+                            <li class="fragment"><strong>Setup</strong>  <a target="_blank" href="https://github.com/onema/opsworks-chef-cookbooks/blob/master/phpenv/recipes/php_redis.rb">phpenv::php_redis</a></li>
+                            <li class="fragment"><strong>Deploy and Configure</strong> <a target="_blank" href="https://github.com/onema/opsworks-chef-cookbooks/blob/master/cronjobs/recipes/default.rb">cronjobs</a></li>
+                            <li class="fragment"><strong>Deploy</strong> <a target="_blank" href="https://github.com/onema/opsworks-chef-cookbooks/blob/master/composer/recipes/install.rb">composer::install</a></li>
+                            <li class="fragment"><strong>Deploy</strong> <a target="_blank" href="https://github.com/onema/opsworks-chef-cookbooks/blob/master/phpenv/recipes/htaccess_env_vars.rb">phpenv::htaccess_env_vars</a> </li>
+                            <li class="fragment"><strong>Deploy</strong> database migrations</li>
+                            <li class="fragment"><strong>Undeploy</strong> database rollback</li>
+
+                        </ol>
+                    </section>
+                    <section>
+                        <h2>Add OS Packages</h2>
+                        <p>Some are optional, some are required by the application</p>
+                        
+                        <ol>
+                            <li class="fragment"><a target="_blank" href="#">php-apc</a>: Another PHP Cache (Optional)</li>
+                            <li class="fragment"><a target="_blank" href="#">acl</a>: Access Control List (Required, give access to cache and log files)</li>
+                            <li class="fragment"><a target="_blank" href="#">php-pear</a>: Dependency Manager (Optional, can be used to install PHP modules via recipes)</li>
+                            <li class="fragment"><a target="_blank" href="#">php5-intl</a>: Internationalization PHP Module (Optional, is best to have it with Symfony apps)</li>
+                        </ol>
+                    </section>
+                </section>
+                <section>
+                    <section data-background="img/app.jpg">
+
+                    </section>
+                    <section>
+                        <h2>Application Settup</h2>
+                        <p>
+                            Get it from GitHub!
+                        </p>
+                        <img src="img/image11.png">
+                    </section>
+
+                </section>
+                <section data-background="img/access-management.jpg">
+                    <h2>Access Management</h2>
+                    <p class="fragment">Allow Mr "One Doe" to see the stack and ssh to the instance</p>
+                </section>
+                <section>
+
+                    <section data-background="img/training-wheels.jpg">
+                        <h2>Learning by repetition</h2>
+                        <p>Let's do it all over again</p>
+                        <p>This time we'll use the AWS SDK for PHP</p>
+                    </section>
+                    <section>
+                        <h2>Install the SDK using Composer</h2>
+                        <pre><code data-trim contenteditable>
+{
+    "require": {
+        "aws/aws-sdk-php": "2.4.*@dev"
+    }
+}
+                        </code></pre>
+                        <pre><code data-trim contenteditable>
+$ php composer.phar update aws/aws-sdk-php
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h2>Create OpsWorks Client</h2>
+
+<pre><code data-trim contenteditable>
+use Aws\OpsWorks\OpsWorksClient;
+
+class OpsWorksCommand  extends Command
+{
+    protected $client;
+    protected $this->parameters;
+    public function __construct()
+    {
+        parent::__construct();
+        $this->parameters = $config['parameters'];
+        $this->client = OpsWorksClient::factory(array(
+            'key'    => $this->parameters['aws_api_key'],
+            'secret' => $this->parameters['aws_api_secret'],
+            'region' => $this->parameters['aws_region'],
+        ));
+    }
+}
+</code></pre>
+                    </section>
+                    <section>
+                        <h2>Create a stack</h2>
+                        <pre><code data-trim contenteditable>
+                            $ php app/console opsworks:create:stack STACK_NAME
+                        </code></pre>
+<pre><code data-trim contenteditable>
+$result = $this->client->createStack(array(
+    'Name'                      => $stackName,
+    'Region'                    => $this->parameters['aws_region'],
+    'ServiceRoleArn'            => $this->parameters['aws_iam_role'],
+    'DefaultInstanceProfileArn' => $this->parameters['aws_instance_role'],
+));
+
+echo $result['StackId'];
+
+</code></pre>
+                    </section>
+                    <section>
+                        <h2>Update stack</h2>
+                        <pre><code data-trim contenteditable>
+                            $ php app/console opsworks:update:stack:chef STACK_ID git CHEF_REPO PATH_KEY
+                        </code></pre>
+<pre><code data-trim contenteditable>
+$this->client->updateStack(array(
+    // StackId is required
+    'StackId'               => $stackId,
+    'ServiceRoleArn'        => $this->parameters['aws_iam_role'],
+    'UseCustomCookbooks'    => true,
+    'CustomCookbooksSource' => array(
+        'Type'   => $type,
+        'Url'    => $url,
+        'SshKey' => $sshKey,
+    ),
+));
+</code></pre>
+                    </section>
+                    <section>
+                        <h2>Create Layer</h2>
+                        <pre><code data-trim contenteditable>
+                            $ php app/console opsworks:create:layer STACK_ID
+                        </code></pre>
+<pre><code data-trim contenteditable>
+$result = $this->client->createLayer(array(
+    'StackId'   => $stackId,
+    'Type'      => 'php-app',
+    'Name'      => 'PHP App Server',
+    'Shortname' => 'php-app-server',
+));
+
+echo result['LayerId'];
+</code></pre>
+                    </section>
+                    <section>
+                        <h2>Update Layer</h2>
+                        <pre><code data-trim contenteditable>
+                            $ opsworks:update:layer LAYER_ID --recipes-setup="..." --os-packages="..."
+                        </code></pre>
+<pre><code data-trim contenteditable>
+$this->client->updateLayer(array(
+    'LayerId' => $layerId,
+    'CustomRecipes' => $customRecipes, // array(string, ...)
+    'Packages' => $osPackages,         // array(string, ...)
+));
+</code></pre>
+                    </section>
+                    <section>
+                        <h2>Create App</h2>
+                        <pre><code data-trim contenteditable>
+                            $ opsworks:create:app STACK_ID NAME --source-type="" --source-url="" --source-revision="" --ssh-key-path=""
+                        </code></pre>
+<pre><code data-trim contenteditable>
+$this->client->createApp(array(
+    // StackId is required
+    'StackId'   => $stackId,
+    'Type'      => 'php',
+    'Name'      => $name,
+    'ShortName' => $name
+    'AppSource' => array(
+        'Type'      => $type,
+        'Url'       => $url,
+        'Revision'  => $revision,
+        'SshKey'    => $sshKey,
+    ),
+));
+</code></pre>
+                    </section>
+                    <section>
+                        <h2>Create and Start Instance</h2>
+                        <pre><code data-trim contenteditable>
+                            $ php app/console opsworks:create:instance STACK_ID LAYER_ID c1.medium
+                        </code></pre>
+<pre><code data-trim contenteditable>
+$result = $this->client->createInstance(array(
+    'StackId'      => $stackId,
+    'LayerIds'     => array($layerId),
+    'InstanceType' => $instanceType,
+    'DefaultInstanceProfileArn' => $this->parameters['aws_instance_role'],
+));
+
+echo $result['InstanceId'];
+
+$instanceResult = $this->client->startInstance(array(
+    'InstanceId' => $result['InstanceId']
+));
+
+echo 'Success!';
+</code></pre>
+                    </section>
+                    <section>
+                        <h2>More Information</h2>
+                        <p><a target="_blank" href="http://docs.aws.amazon.com/aws-sdk-php/latest/class-Aws.OpsWorks.OpsWorksClient.html">Visit the AWS SDK for PHP Documentation</a></p>
+                        <p><a target="_blank" href="https://github.com/onema/opsworks-demo-console">Clone/Fork the console</a></p>
+
+                    </section>
+                </section>
+                <section data-background="img/remove-training-wheels.jpg">
+                    <h2>Learning By Repetition take #2</h2>
+                    <p>This time we'll setup the whole application with a single command</p>
+                    <br /><br /><br /><br /><br />
+                </section>
+                <section data-background="img/robot.jpg">
+                    <h1>Advanced Scenarios</h1>
+                    <ul>
+                        <li class="fragment">Shared application hosting with custom subdomain</li>
+                        <li class="fragment">Dedicated application hosting</li>
+                        <li class="fragment">Resell your technology</li>
+                        <li class="fragment">Scheduled of complex tasks</li>
+                        <li class="fragment">Other Ideas?</li>
+                    </ul>
+                </section>
+                <section data-background="img/raise-hand.jpg">
+                    <h1>Questions?</h1>
+                </section>
+                <section>
+                    <section>
+                        <h2>References</h2>
+                        <ul>
+                            <li><a target="_blank" href="https://github.com/onema/opsworks-demo-console">Onema/opsworks-demo-console</a></li>
+                            <li><a target="_blank" href="https://github.com/onema/opsworks-chef-cookbooks"> Onema/opsworks-chef-cookbooks</a> </li>
+                            <li><a target="_blank" href="http://docs.aws.amazon.com/aws-sdk-php/latest/class-Aws.OpsWorks.OpsWorksClient.html">AWS SDK for PHP Documentation</a></li>
+                            <li><a target="_blank" href="http://docs.aws.amazon.com/opsworks/latest/APIReference/Welcome.html">OpsWorks API Documentation (latest)</a> </li>
+                            <li><a target="_blank" href="http://aws.amazon.com/opsworks/">AWS OpsWorks</a></li>
+                            <li><a target="_blank" href="http://symfony.com/doc/current/components/console/index.html">Symfony 2 Console Component</a> </li>
+                            <li><a target="_blank" href="http://tech.hulu.com/blog/2012/07/06/automating-system-provisioning-and-application-deployment-with-chef/">Automating system provisioning and application deployment with chef</a> </li>
+                            <li><a target="_blank" href="http://www.infoworld.com/d/data-center/puppet-or-chef-the-configuration-management-dilemma-215279">Puppet or Chef - The configuration management dilema</a></li>
+                            <li><a target="_blank" href="http://www.wired.com/wiredenterprise/2011/10/chef_and_puppet/">Chef and Puppet</a> </li>
+                            <li><a target="_blank" href="http://www.slideshare.net/AmazonWebServices/introducing-aws-opsworks">Introducing AWS OpsWorks</a></li>
+                            <li><a target="_blank" href="http://www.slideshare.net/AmazonWebServices/customizing-aws-ops-works-with-chef-11-and-amazon-machine-images">Customizing OpsWorks with Chef 11 and Amazon Machine Images</a> </li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h2>References (cont.)</h2>
+                        <ul>
+                            <li><a target="_blank" href="http://www.youtube.com/watch?v=R68eq-lL5lA">Customizing OpsWorks with Chef 11 and Amazon Machine Images (Video)</a> </li>
+                            <li><a target="_blank" href="https://www.digitalocean.com/community/articles/how-to-install-linux-apache-mysql-php-lamp-stack-on-ubuntu">How to install LAMP Stack on Ubuntu</a> </li>
+                            <li><a target="_blank" href="http://docs.opscode.com/resource_cron.html">Chef Cron</a> </li>
+                            <li><a target="_blank" href="http://docs.aws.amazon.com/opsworks/latest/userguide/workingcookbook-events.html">AWS OpsWorks Lifecycle Events</a> </li>
+                            <li><a target="_blank" href="http://www.slideshare.net/AmazonWebServices/advanced-topics-session-2-introducing-awsopsworks">Advanced Topics - Introducing AWS OpsWorks</a> </li>
+                        </ul>
+                    </section>
+                </section>
+                <section>
+                    <h1>The End</h1>
+                    <h3><a target="_blank" href="http://onema.io">Juan Manuel Torres</a></h3>
+                    <small><a target="_blank" href="http://twitter.com/onema">@onema</a> / <a target="_blank" href="http://onema.io">onema.io</a></small>
+                </section>
+            </div>
+        </div>
+
+        <script src="lib/js/head.min.js"></script>
+        <script src="js/reveal.min.js"></script>
+
+        <script>
+
+            // Full list of configuration options available here:
+            // https://github.com/hakimel/reveal.js#configuration
+            Reveal.initialize({
+                controls: true,
+                progress: true,
+                history: true,
+                center: true,
+
+                theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+                transition: Reveal.getQueryHash().transition || 'linear', // default/cube/page/concave/zoom/linear/fade/none
+
+                // Optional libraries used to extend on reveal.js
+                dependencies: [
+                    { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                    { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                    { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+                    { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+                ]
+            });
+
+        </script>
+        
+
+    </body>
+</html>
