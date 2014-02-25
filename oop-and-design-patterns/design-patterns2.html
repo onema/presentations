@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+
+        <title>Into to OOP and Design Patterns - By Juan Manuel Torres</title>
+
+        <meta name="description" content="into to oop and design patterns.">
+        <meta name="author" content="Juan Manuel Torres">
+
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+        <link rel="stylesheet" href="../css/reveal.min.css">
+        <link rel="stylesheet" href="../css/theme/default.css" id="theme">
+
+        <!-- For syntax highlighting -->
+        <link rel="stylesheet" href="../lib/css/zenburn.css">
+
+        <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+        <script>
+            document.write( '<link rel="stylesheet" href="../css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+        </script>
+
+        <!--[if lt IE 9]>
+        <script src="../lib/js/html5shiv.js"></script>
+        <![endif]-->
+    </head>
+
+    <body>
+
+        <div class="reveal">
+
+            <!-- Any section element inside of this container is displayed as a slide -->
+            <div class="slides">
+                <section>
+                    <h1>Introduction to Design Patterns</h1>
+                    
+                    <p>
+                        <small>Created by <a href="http://onema.io">Juan Manuel Torres</a> / <a href="http://twitter.com/onema">@onema</a> / <a href="http://onema.io">onema.io</a></small>
+                    </p>
+                </section>
+                <section>
+                    <section>
+                        <h2>Reviewing Object Oriented Programming</h2>
+                        <p class="fragment">Who knows what OOP is?</p>
+                        <blockquote class="fragment">
+                            Wikipedia: Object-oriented programming (OOP) is a programming ] that represents concepts as "objects" that have data fields (attributes that describe the object) and associated procedures known as methods.
+                        </blockquote>
+
+                    </section>
+                    <section>
+                        <h2>Who knows the difference between a class and a object?</h2>
+                        <img class="fragment" src="img/topblueprint.jpg" width="400">
+                        <img class="fragment" src="img/batman-mobile.jpg" width="440">
+                    </section>
+                    <section>
+                        <h2>Class Structure</h2>
+<pre><code>
+
+class ClassName
+{
+    // These are variables bound to the object and can
+    // only be accessed by the object
+    public $classProperty01;
+
+    public function classMethod01()
+    {
+        // Methods are class specific function.
+        // Objects can reference themselves using $this.
+    }
+}
+</code></pre>
+                    </section>
+                    <section>
+                        <h2>Magic methods</h2>
+                        <blockquote>Set of special methods that are called when certain actions occur with in objects.</blockquote>
+                        <p>Constructors and Destructors are examples</p>
+                    </section>
+                    <section>
+                        <h2>Inheritance</h2>
+                        <p>Classes can extend the behaviour of other classes by using the  "extends" keyword</p>
+<pre><code>
+class FirstName
+{
+    protected $firstName;
+
+    public function setFirstName($firstName)
+    {
+        $this->$name = $firstName;
+    }
+}
+</code></pre>
+<pre><code>
+class FullName extends FirstName
+{
+    protected $lastName;
+
+    public function setLastName($lastName)
+    {
+        $this->$lastName = $lastName;
+    }
+}
+</code></pre>
+                    </section>
+                    <section>
+                        <h2>Overwriting properties and methods</h2>
+
+<pre><code>
+class FirstName
+{
+    protected $firstName;
+
+    public function setName($firstName)
+    {
+        $this->$name = $firstName;
+    }
+}
+</code></pre>
+<pre><code>
+class FullName extends FirstName
+{
+    protected $lastName;
+
+    public function setName($firstName, $lastName)
+    {
+        $this->$name = $firstName;
+        $this->$lastName = $lastName;
+    }
+}
+</code></pre>
+
+                    </section>
+                    <section>
+                        <h2>Preserving method functionality while overwriting</h2>
+<pre><code>
+class FirstName
+{
+    protected $firstName;
+
+    public function setName($firstName)
+    {
+       $this->$name = $firstName;
+    }
+}
+</code></pre>
+<pre><code>
+class FullName extends FirstName
+{
+    protected $lastName;
+
+    public function setName($firstName, $lastName)
+    {
+        parent::setName($firstName);
+        $this->$lastName = $lastName;
+    }
+}
+</code></pre>
+                    </section>
+                    <section>
+                        <h2>Public, protected and private properties</h2>
+<pre><code>
+class Dog
+{
+    private $sound
+
+    public function bark()
+    {
+        echo $sound;
+    }
+}
+</code></pre>
+<pre><code>
+    $dog = new Dog();
+    $dog->bark();
+    $dog->sound;      // we can't do this!
+</code></pre>
+                    </section>
+                    <section>
+                        <h2>Polymorphism</h2>
+                        <p>Describes a pattern in which classes have different behaviour but share common interface.</p>
+
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h2>Imagine we are the creators of a notification solution</h2>
+                        <p>
+                            Our particular implementation sends an email notification to us every time an important <strong>event</strong>
+                            happens on our website: new article, blogpost, registration, etc.
+                        </p>
+                    </section>
+                    <section>
+                        <h2>With the advent of so many different social media sites</h2>
+                        <p>
+                            We have been pressured to re-design our implementation and send the notifications to
+                            multiple social media channels: Facebook, Twitter, LinkedIn, in addition to email.
+                        </p>
+                    </section>
+                </section>
+                <section>
+                    <h1>Meet the Observer and Mediator Patterns</h1>
+                    <p>Extending behavior without inheritance</p>
+                </section>
+                <section>
+                    <section>
+                        <h2>Observer Pattern</h2>
+                        <blockquote>
+                            Define a one-to-many dependency between objects so that when one object changes state,
+                            all its dependents are notified and updated automatically.
+                        </blockquote>
+                        <p class="fragment">
+                            Think about it as a magazine subscription service.
+                        </p>
+                    </section>
+                    <section>
+                        <h2>Subscribe to a magazine</h2>
+                        <img class="fragment" src="img/observer01.jpg">
+                    </section>
+                    <section>
+                        <h2>Every time there is a new edition it gets delivered to you</h2>
+                        <img class="fragment" src="img/observer02.jpg">
+                    </section>
+                    <section>
+                        <h2>When you don't want to receive the magazine you unsubscribe</h2>
+                        <img class="fragment" src="img/observer03.jpg">
+                    </section>
+                    <section>
+                        <h2>Only subscribers will continue to get the magazine</h2>
+                        <img class="fragment" src="img/observer04.jpg">
+                    </section>
+                    <section>
+                        <h2>Exercise 1</h2>
+                        Based on what we know about the observer pattern:
+                        <ol>
+                            <li>Design the class structure and</li>
+                            <li>Explain how observers get registered</li>
+                            <li>Explain how observers get notified</li>
+                        </ol>
+                    </section>
+                    <section>
+                        <h2 class="fragment">Class Structure</h2>
+                        <img src="img/observer05.jpg" class="fragment">
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h2>Mediator Pattern</h2>
+                        <blockquote>
+                            Define an object that encapsulates how a set of objects interact. Mediator promotes
+                            loose coupling by keeping objects from referring to each other explicitly, and it lets
+                            you vary their interaction independently.
+                        </blockquote>
+                    </section>
+                    <section>
+                        <h2>Loose coupling is achieved by communicating with a mediator instead of each other</h2>
+                        <img class="fragment" src="img/mediator01.jpg">
+                    </section>
+                    <section>
+                        <h2>We need to extend our observer system to allow different types of classes to be used</h2>
+                        <p>
+                            Sending notifications is not enough, when important events happen we want to be able to
+                            perform other actions. Objects performing these actions should not know about observed
+                            objects (loose coupling). For example after a new blogpost is created an RSS feed is generated
+                            or a PDF version of the post is placed in a remote location for downloads.
+                        </p>
+                    </section>
+                    <section>
+                        <h2>Consumer wants to be informed (listen) on certain events</h2>
+                        <img src="img/mediator03.jpg">
+                    </section>
+                    <section>
+                        <h2>New (non-notification) RSS consumer may also listen for "on new blogpost" event</h2>
+                        <img src="img/mediator04.jpg">
+                    </section>
+                    <section>
+                        <h2>When an event occurs the producer informs the mediator</h2>
+                        <img src="img/mediator05.jpg">
+                    </section>
+                    <section>
+                        <h2>Finally the mediator notifies the consumers in order of priority</h2>
+                        <img src="img/mediator06.jpg">
+                    </section>
+                    <section>
+                        <h2>The Symfony Event Dispatcher Component</h2>
+                        <p>
+                            Implements the Mediator pattern, enabling developers to extend the symfony framework, or use the
+                            component in their own projects.
+                        </p>
+                    </section>
+                    <section>
+                        <h2>Exercise 2</h2>
+                        <p>
+                            Use pseudocode to implement the process described below, <strong>no need to implement the mediator</strong>,
+                            assume the mediator class has the following methods: addListener(eventName, event) and dispatch(eventName)
+                        </p>
+                        <ol>
+                            <li>Consumer wants to be informed (listen) on certain events</li>
+                            <li>When a blogpost is created the producer informs the mediator</li>
+                            <li>The mediator notifies the consumers in order of priority</li>
+                        </ol>
+                    </section>
+                    <section>
+                        <h2 class="fragment">Code</h2>
+<pre class="fragment"><code>
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\Event;
+$dispatcher = new EventDispatcher();
+
+// add listeners
+$dispatcher->addListener('blog.post.new', array($rssFeed, 'onNewPost'));
+$dispatcher->addListener('blog.post.new', array($sendTweet, 'onNewPost'));
+
+$blogPost = new BlogPost(...);
+$blogPost->setName('Hello World!');
+$blogPost->save();
+
+// dispatch the event
+$event = new BlogPostEvent($blogPost);
+$dispatcher->dispatch('blog.post.saved', $event);
+</code></pre>
+                    </section>
+                </section>
+                <section>
+                    <h1>THE END</h1>
+                    <small>BY Juan Manuel Torres / onema.io / @onema / kinojman@gmail.com</small>
+                </section>
+                <section>
+                    <h2>References</h2>
+                    <ol>
+                        <li><a href="http://net.tutsplus.com/tutorials/php/object-oriented-php-for-beginners/">Object Oriented PHP for Beginners</a></li>
+                        <li><a href="http://en.wikipedia.org/wiki/Object-oriented_programming">Object-oriented programming</a> </li>
+                        <li><a href="http://www.amazon.com/First-Design-Patterns-Elisabeth-Freeman/dp/0596007124">Head First Design Patterns</a></li>
+                        <li><a href="https://sourcemaking.com/design_patterns">SourceMaking design patterns</a></li>
+                        <li><a href="http://www.php.net/manual/en/language.oop5.magic.php">PHP Magic Methods</a></li>
+                        <li><a href="http://net.tutsplus.com/tutorials/php/understanding-and-applying-polymorphism-in-php/?search_index=1">Understanding and Applying Polymorphism in PHP</a></li>
+
+                        <li><a href="http://net.tutsplus.com/tutorials/php/the-whens-and-whys-for-php-design-patterns/?search_index=3">The Whens and Whys for PHP Design Patterns</a></li>
+                        <li><a href="http://symfony.com/doc/current/components/event_dispatcher/introduction.html">Event Dispatcher Component</a></li>
+                        <li><a href="http://blog.servergrove.com/2013/10/23/symfony2-components-overview-eventdispatcher/">Symfony2 components overview: EventDispatcher</a></li>
+                    </ol>
+
+                </section>
+                
+            </div>
+        </div>
+
+        <script src="../lib/js/head.min.js"></script>
+        <script src="../js/reveal.min.js"></script>
+
+        <script>
+
+            // Full list of configuration options available here:
+            // https://github.com/hakimel/reveal.js#configuration
+            Reveal.initialize({
+                controls: true,
+                progress: true,
+                history: true,
+                center: true,
+
+                theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+                transition: Reveal.getQueryHash().transition || 'linear', // default/cube/page/concave/zoom/linear/fade/none
+
+                // Optional libraries used to extend on reveal.js
+                dependencies: [
+                    { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                    { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                    { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+                    { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+                ]
+            });
+
+        </script>
+    </body>
+</html>

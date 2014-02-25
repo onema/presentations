@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+
+        <title>Into to OOP and Design Patterns - By Juan Manuel Torres</title>
+
+        <meta name="description" content="into to oop and design patterns.">
+        <meta name="author" content="Juan Manuel Torres">
+
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+        <link rel="stylesheet" href="../css/reveal.min.css">
+        <link rel="stylesheet" href="../css/theme/default.css" id="theme">
+
+        <!-- For syntax highlighting -->
+        <link rel="stylesheet" href="../lib/css/zenburn.css">
+
+        <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+        <script>
+            document.write( '<link rel="stylesheet" href="../css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+        </script>
+
+        <!--[if lt IE 9]>
+        <script src="../lib/js/html5shiv.js"></script>
+        <![endif]-->
+    </head>
+
+    <body>
+
+        <div class="reveal">
+
+            <!-- Any section element inside of this container is displayed as a slide -->
+            <div class="slides">
+                <section>
+                    <h1>Introduction to Design Patterns</h1>
+                    
+                    <p>
+                        <small>Created by <a href="http://onema.io">Juan Manuel Torres</a> / <a href="http://twitter.com/onema">@onema</a> / <a href="http://onema.io">onema.io</a></small>
+                    </p>
+                </section>
+                <section>
+                    <section>
+                        <h2>Reviewing Object Oriented Programming</h2>
+                        <p class="fragment">Who knows what OOP is?</p>
+                        <blockquote class="fragment">
+                            Wikipedia: Object-oriented programming (OOP) is a programming ] that represents concepts as "objects" that have data fields (attributes that describe the object) and associated procedures known as methods.
+                        </blockquote>
+
+                    </section>
+                    <section>
+                        <h2>Who knows the difference between a class and a object?</h2>
+                        <img class="fragment" src="img/topblueprint.jpg" width="400">
+                        <img class="fragment" src="img/batman-mobile.jpg" width="440">
+                    </section>
+                    <section>
+                        <h2>Class Structure</h2>
+<pre><code>
+
+class ClassName
+{
+    // These are variables bound to the object and can
+    // only be accessed by the object
+    public $classProperty01;
+
+    public function classMethod01()
+    {
+        // Methods are class specific function.
+        // Objects can reference themselves using $this.
+    }
+}
+</code></pre>
+                    </section>
+                    <section>
+                        <h2>Magic methods</h2>
+                        <blockquote>Set of special methods that are called when certain actions occur with in objects.</blockquote>
+                        <p>Constructors and Destructors are examples</p>
+                    </section>
+                    <section>
+                        <h2>Inheritance</h2>
+                        <p>Classes can extend the behaviour of other classes by using the  "extends" keyword</p>
+<pre><code>
+class FirstName
+{
+    protected $firstName;
+
+    public function setFirstName($firstName)
+    {
+        $this->$name = $firstName;
+    }
+}
+</code></pre>
+<pre><code>
+class FullName extends FirstName
+{
+    protected $lastName;
+
+    public function setLastName($lastName)
+    {
+        $this->$lastName = $lastName;
+    }
+}
+</code></pre>
+                    </section>
+                    <section>
+                        <h2>Overwriting properties and methods</h2>
+
+<pre><code>
+class FirstName
+{
+    protected $firstName;
+
+    public function setName($firstName)
+    {
+        $this->$name = $firstName;
+    }
+}
+</code></pre>
+<pre><code>
+class FullName extends FirstName
+{
+    protected $lastName;
+
+    public function setName($firstName, $lastName)
+    {
+        $this->$name = $firstName;
+        $this->$lastName = $lastName;
+    }
+}
+</code></pre>
+
+                    </section>
+                    <section>
+                        <h2>Preserving method functionality while overwriting</h2>
+<pre><code>
+class FirstName
+{
+    protected $firstName;
+
+    public function setName($firstName)
+    {
+       $this->$name = $firstName;
+    }
+}
+</code></pre>
+<pre><code>
+class FullName extends FirstName
+{
+    protected $lastName;
+
+    public function setName($firstName, $lastName)
+    {
+        parent::setName($firstName);
+        $this->$lastName = $lastName;
+    }
+}
+</code></pre>
+                    </section>
+                    <section>
+                        <h2>Public, protected and private properties</h2>
+                    </section>
+                    <section>
+                        <h2>Polymorphism</h2>
+                        <p>Describes a pattern in which classes have different behaviour but share common interface.</p>
+
+                    </section>
+                </section>
+                <section>
+                    <h1>Welcome to design patterns</h1>
+                    <h3>Your problems have already been solved!</h3>
+                </section>
+                <section>
+                    <section>
+                        <h2>Let' assume we all work for an independent car design company</h2>
+                        <p>
+                            As developers we are in charge of creating the software that will display new 3D models and simulations.
+                        </p>
+                        <img src="img/automobile01.jpg">
+                    </section>
+                    <section>
+                        <h2>New requirement</h2>
+                        <p>
+                            As part of improving the software, we should be able to create 4WD vehicles.
+                            This is the first of many requirements that will come from management.
+                        </p>
+                    </section>
+                    <section>
+                        <h2>"Improved" class design</h2>
+                        <img class="fragment" src="img/automobile02.jpg">
+                        <p class="fragment">What is wrong with this?</p>
+                    </section>
+                    <section>
+                        <h2>All cars are not full time 4WD</h2>
+                        <p>
+                            There are part-time, automatic, shift on the fly 4WD, 2WD and All-Wheel Drive!
+                        </p>
+                        <p class="fragment">
+                            We could just overwrite the behaviour of things that change.
+                            <br/>
+                            <img src="img/automobile03.jpg">
+                        </p>
+                    </section>
+                    <section>
+                        <h2>Inheritance will not solve this problem, what can we do?</h2>
+                        <p><strong>Exercise 1:</strong> In groups of 2 discus and improve the current class design.</p>
+                        <small><strong>HINT: use polymorphism</strong></small>
+                    </section>
+                    <section>
+                        <h2>Design principle 1:</h2>
+                        <p>
+                            Identify what parts of the application changes and separate them from what stays the same.
+                        </p>
+                    </section>
+                    <section>
+                        <h2>Remember be DRY</h2>
+                        <h3>Code repetition may be an indication that you are not doing things right!</h3>
+                        <p><strong>Exercise 2:</strong>Improve your own design.</p>
+                        <small><strong>HINT: use polymorphism</strong></small>
+                    </section>
+                    <section>
+                        <img src="img/automobile04.jpg">
+                        <h2 class="fragment">What is wrong with this design?</h2>
+                    </section>
+                    <section>
+                        <h2>Design principle 2:</h2>
+                        <p>
+                            Program to an interface, not an implementation.
+                        </p>
+                    </section>
+                    <section>
+                        <h2>Make classes for each of our behaviors</h2>
+                        <img src="img/automobile05.jpg">
+                    </section>
+                    <section>
+                        <h2>Design principle 3:</h2>
+                        <p>
+                            Favor composition over inheritance.
+                        </p>
+                    </section>
+                    <section>
+                        <h2>Encapsulate Behaviors</h2>
+                        <img src="img/automobile06.jpg">
+                    </section>
+                    <section>
+<pre><code>
+abstract class Automobile
+{
+    protected $wheelDriveBehavior;
+    protected $honkBehavior;
+
+    public function wheelDrive()
+    {
+        $this->wheelDriveBehavior->wheelDrive();
+    }
+
+    public function honk()
+    {
+        $this->honkBehavior->honk();
+    }
+}
+</code></pre>
+<pre><code>
+class Truck extends Automobile
+{
+    public function __construct(WheelDriveInterface $wheelDrive, HonkInterface $honk)
+    {
+        //$this->wheelDriveBehavior = new 4WheelDrive();
+        //$this->honkBehavior = new LaCucarachaHonk();
+        $this->wheelDriveBehavior = $wheelDrive;
+        $this->honkBehavior = $honk;
+    }
+
+    // other methods ...
+}
+</code></pre>
+                    </section>
+
+                </section>
+                <section>
+                    <h1>THE END</h1>
+                    <small>BY Juan Manuel Torres / onema.io / @onema / kinojman@gmail.com</small>
+                </section>
+                <section>
+                    <h2>References</h2>
+                    <ol>
+                        <li><a href="http://net.tutsplus.com/tutorials/php/object-oriented-php-for-beginners/">Object Oriented PHP for Beginners</a></li>
+                        <li><a href="http://en.wikipedia.org/wiki/Object-oriented_programming">Object-oriented programming</a> </li>
+                        <li><a href="http://www.amazon.com/First-Design-Patterns-Elisabeth-Freeman/dp/0596007124">Head First Design Patterns</a></li>
+                        <li><a href="https://sourcemaking.com/design_patterns">SourceMaking design patterns</a></li>
+                        <li><a href="http://www.php.net/manual/en/language.oop5.magic.php">PHP Magic Methods</a></li>
+                        <li><a href="http://net.tutsplus.com/tutorials/php/understanding-and-applying-polymorphism-in-php/?search_index=1">Understanding and Applying Polymorphism in PHP</a></li>
+                        <li><a href="http://4wheeldrive.about.com/od/offroadatvbasics/ss/4wd-2wd-difference-between-4x4-4x2.htm">4WD vs 2WD: The Differences Between 4x4 and 4x2</a></li>
+                        <li><a href="http://searchsoa.techtarget.com/definition/object-oriented-programming">object-oriented programming (OOP)</a></li>
+                    </ol>
+
+                </section>
+                
+            </div>
+        </div>
+
+        <script src="../lib/js/head.min.js"></script>
+        <script src="../js/reveal.min.js"></script>
+
+        <script>
+
+            // Full list of configuration options available here:
+            // https://github.com/hakimel/reveal.js#configuration
+            Reveal.initialize({
+                controls: true,
+                progress: true,
+                history: true,
+                center: true,
+
+                theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+                transition: Reveal.getQueryHash().transition || 'linear', // default/cube/page/concave/zoom/linear/fade/none
+
+                // Optional libraries used to extend on reveal.js
+                dependencies: [
+                    { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                    { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                    { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+                    { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+                ]
+            });
+
+        </script>
+    </body>
+</html>
